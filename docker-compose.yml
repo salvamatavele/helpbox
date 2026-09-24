@@ -1,0 +1,64 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: helpbox_mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: helpbox_root_secret
+      MYSQL_DATABASE: helpbox_db
+      MYSQL_USER: helpbox_user
+      MYSQL_PASSWORD: helpbox_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - helpbox_net
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: helpbox_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: helpbox_root_secret
+      UPLOAD_LIMIT: 64M
+    ports:
+      - "8034:80"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - helpbox_net
+
+  helpbox-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: helpbox_app
+    restart: unless-stopped
+    ports:
+      - "3004:3000"
+    environment:
+      - DATABASE_URL=mysql://helpbox_user:helpbox_password@mariadb:3306/helpbox_db
+      - NEXTAUTH_SECRET=super_secret_helpbox_key_32chars_long_at_least
+      - NEXT_PUBLIC_APP_URL=http://localhost:3004
+      - NODE_ENV=production
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - helpbox_net
+
+volumes:
+  mariadb_data:
+    driver: local
+
+networks:
+  helpbox_net:
+    driver: bridge

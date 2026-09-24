@@ -1,0 +1,10 @@
+Dockerfile
+docker-compose.yml
+.git
+.gitignore
+.next
+node_modules
+npm-debug.log
+README.md
+docs
+openspec

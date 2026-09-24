@@ -1,0 +1,142 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  SOCIAL_WORKER
+  SPECIALIST
+}
+
+enum CaseCategory {
+  SOCIAL_SUPPORT
+  COMPLAINT
+  GRIEVANCE
+  SUGGESTION
+  OTHER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum CaseStatus {
+  SUBMITTED
+  IN_TRIAGE
+  IN_PROGRESS
+  WAITING_INFO
+  REFERRED
+  RESOLVED
+  CLOSED
+}
+
+enum SenderType {
+  CITIZEN
+  STAFF
+  SYSTEM
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String
+  passwordHash  String
+  role          Role           @default(SOCIAL_WORKER)
+  departmentId  String?
+  department    Department?    @relation(fields: [departmentId], references: [id])
+  assignedCases Case[]         @relation("AssignedCases")
+  messages      CaseMessage[]
+  auditLogs     CaseAuditLog[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([departmentId])
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  users       User[]
+  cases       Case[]
+  createdAt   DateTime @default(now())
+}
+
+model Case {
+  id             String         @id @default(uuid())
+  trackingCode   String         @unique
+  accessPinHash  String
+  category       CaseCategory
+  priority       Priority       @default(MEDIUM)
+  status         CaseStatus     @default(SUBMITTED)
+  isAnonymous    Boolean        @default(true)
+  contactName    String?
+  contactChannel String?
+  title          String
+  description    String         @db.Text
+  assignedToId   String?
+  assignedTo     User?          @relation("AssignedCases", fields: [assignedToId], references: [id])
+  departmentId   String?
+  department     Department?    @relation(fields: [departmentId], references: [id])
+  messages       CaseMessage[]
+  auditLogs      CaseAuditLog[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([trackingCode])
+  @@index([status])
+  @@index([priority])
+  @@index([assignedToId])
+  @@index([departmentId])
+}
+
+model CaseMessage {
+  id             String     @id @default(uuid())
+  caseId         String
+  case           Case       @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  senderType     SenderType
+  senderId       String?
+  sender         User?      @relation(fields: [senderId], references: [id])
+  senderName     String?
+  message        String     @db.Text
+  isInternalNote Boolean    @default(false)
+  createdAt      DateTime   @default(now())
+
+  @@index([caseId])
+  @@index([senderId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  caseId    String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+model CaseAuditLog {
+  id        String   @id @default(uuid())
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id])
+  actorName String
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+
+  @@index([caseId])
+  @@index([actorId])
+}

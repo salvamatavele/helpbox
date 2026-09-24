@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#042f2e" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6" />
+      <stop offset="100%" stop-color="#2dd4bf" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#grad)" />
+  <!-- Shield Icon representing safety, confidentiality, support -->
+  <path d="M256 96 C336 96 384 136 384 136 C384 272 296 376 256 416 C216 376 128 272 128 136 C128 136 176 96 256 96 Z" fill="none" stroke="url(#accent)" stroke-width="24" stroke-linejoin="round"/>
+  <!-- Heart and Hands/Care emblem inside shield -->
+  <path d="M256 210 C240 180 200 180 185 205 C170 230 185 265 256 315 C327 265 342 230 327 205 C312 180 272 180 256 210 Z" fill="#2dd4bf"/>
+</svg>
