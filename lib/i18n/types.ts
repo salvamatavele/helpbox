@@ -194,4 +194,9 @@ export interface Translations {
   telegramFabTooltip: string;
   telegramOnlineBadge: string;
   telegramDoubleCheck: string;
+  pwaInstallTitle: string;
+  pwaInstallDesc: string;
+  btnPwaInstall: string;
+  btnPwaLater: string;
+  pwaIosHint: string;
 }

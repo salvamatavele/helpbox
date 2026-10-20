@@ -1,11 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
-    <linearGradient id="favGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f766e" />
-      <stop offset="100%" stop-color="#0d9488" />
+    <linearGradient id="tgFavGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2481cc" />
+      <stop offset="55%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0f766e" />
     </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
   </defs>
-  <rect width="64" height="64" rx="18" fill="url(#favGrad)" />
-  <path d="M32 14 C44 14 50 19 50 19 C50 37 38 49 32 54 C26 49 14 37 14 19 C14 19 20 14 32 14 Z" fill="none" stroke="#2dd4bf" stroke-width="3.5" stroke-linejoin="round"/>
-  <path d="M32 28 C29.5 24 24 24 21.5 27 C19 30 21.5 35 32 42 C42.5 35 45 30 42.5 27 C40 24 34.5 24 32 28 Z" fill="#2dd4bf"/>
+  <!-- Background squircle -->
+  <rect width="64" height="64" rx="16" fill="url(#tgFavGrad)" />
+  
+  <!-- Outer Shield Outline -->
+  <path d="M32 11 C43 11 49 16 49 16 C49 34 38 47 32 52 C26 47 15 34 15 16 C15 16 21 11 32 11 Z" 
+        fill="rgba(255,255,255,0.12)" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" filter="url(#shadow)"/>
+  
+  <!-- Inner Heart & Care Symbol -->
+  <path d="M32 23 C28.5 19 22.5 19.5 19.5 24 C16.5 28.5 20 34 32 42.5 C44 34 47.5 28.5 44.5 24 C41.5 19.5 35.5 19 32 23 Z" 
+        fill="#ffffff" opacity="0.95"/>
+        
+  <!-- Telegram Messenger checkmark / pulse dot -->
+  <circle cx="45" cy="45" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="1.8"/>
 </svg>

@@ -194,4 +194,9 @@ export const enTranslations: Translations = {
   telegramFabTooltip: 'New Anonymous Report',
   telegramOnlineBadge: 'Online • Active Support',
   telegramDoubleCheck: 'Delivered',
+  pwaInstallTitle: 'Install Helpbox App',
+  pwaInstallDesc: 'Install the app on your device for fast, discreet, and secure access anywhere.',
+  btnPwaInstall: 'Install App',
+  btnPwaLater: 'Maybe later',
+  pwaIosHint: 'To install on iPhone/iPad: tap Share and select "Add to Home Screen".',
 };

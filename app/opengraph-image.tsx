@@ -31,11 +31,11 @@ export default function OpenGraphImage() {
               width: 70,
               height: 70,
               borderRadius: 20,
-              background: 'linear-gradient(135deg, #0d9488 0%, #10b981 100%)',
+              background: 'linear-gradient(135deg, #2481cc 0%, #0284c7 50%, #0f766e 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 10px 25px rgba(13, 148, 136, 0.4)',
+              boxShadow: '0 10px 25px rgba(36, 129, 204, 0.4)',
             }}
           >
             <svg

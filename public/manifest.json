@@ -1,11 +1,11 @@
 {
   "name": "Helpbox - Apoio e Queixas no Anonimato",
   "short_name": "Helpbox",
-  "description": "Plataforma segura de apoio social, escuta ativa e queixas no estrito anonimato.",
+  "description": "Espaço ético, confidencial e seguro de acolhimento psicossocial, escuta ativa e canal de denúncias no estrito anonimato.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
-  "theme_color": "#0d9488",
+  "theme_color": "#2481cc",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -15,9 +15,9 @@
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
+      "src": "/apple-icon",
+      "sizes": "180x180",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]

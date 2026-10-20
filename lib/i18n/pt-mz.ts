@@ -194,4 +194,9 @@ export const ptTranslations: Translations = {
   telegramFabTooltip: 'Novo Relato Anónimo',
   telegramOnlineBadge: 'Online • Apoio Ativo',
   telegramDoubleCheck: 'Entregue',
+  pwaInstallTitle: 'Instalar Aplicação Helpbox',
+  pwaInstallDesc: 'Instale a app no seu dispositivo para acesso rápido, discreto e seguro em qualquer lugar.',
+  btnPwaInstall: 'Instalar Aplicação',
+  btnPwaLater: 'Mais tarde',
+  pwaIosHint: 'Para instalar no iPhone/iPad: toque em Partilhar e depois em "Adicionar ao ecrã principal".',
 };
