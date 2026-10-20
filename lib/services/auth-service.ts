@@ -9,6 +9,7 @@ export interface StaffSessionUser {
   name: string;
   email: string;
   role: 'ADMIN' | 'SOCIAL_WORKER' | 'SPECIALIST';
+  departmentId?: string | null;
   departmentName?: string;
 }
 
@@ -84,6 +85,7 @@ export async function authenticateStaff(email: string, password: string): Promis
           name: user.name,
           email: user.email,
           role: user.role as StaffSessionUser['role'],
+          departmentId: user.departmentId,
           departmentName: user.department?.name,
         };
       }
@@ -99,6 +101,7 @@ export async function authenticateStaff(email: string, password: string): Promis
           name: fallback.name,
           email: fallback.email,
           role: fallback.role,
+          departmentId: fallback.departmentId,
           departmentName: fallback.departmentName,
         };
       }

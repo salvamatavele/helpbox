@@ -36,6 +36,56 @@ export async function getAllDepartments() {
   }
 }
 
+export interface DepartmentWithMembers {
+  id: string;
+  name: string;
+  description: string | null;
+  members: Array<{
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  }>;
+}
+
+export async function getDepartmentsWithMembers(): Promise<DepartmentWithMembers[]> {
+  try {
+    const depts = await prisma.department.findMany({
+      include: {
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+          },
+          orderBy: { name: 'asc' },
+        },
+      },
+      orderBy: { name: 'asc' },
+    });
+
+    return depts.map((d) => ({
+      id: d.id,
+      name: d.name,
+      description: d.description,
+      members: d.users.map((u) => ({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+      })),
+    }));
+  } catch (_err) {
+    return [
+      { id: 'dept-1', name: 'Apoio Psicossocial & Triagem Geral', description: null, members: [] },
+      { id: 'dept-2', name: 'Ouvidoria & Denúncias', description: null, members: [] },
+      { id: 'dept-3', name: 'Proteção da Família e Vulneráveis', description: null, members: [] },
+      { id: 'dept-4', name: 'Apoio Jurídico & Direitos Humanos', description: null, members: [] },
+    ];
+  }
+}
+
 export async function getAllUsers(): Promise<UserSummary[]> {
   try {
     const users = await prisma.user.findMany({

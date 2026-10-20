@@ -5,6 +5,8 @@ import { I18nProvider } from "@/lib/i18n/context";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { PwaRegistrar } from "@/components/pwa-registrar";
+import { TelegramBottomNav } from "@/components/telegram/bottom-nav";
+import { TelegramFab } from "@/components/telegram/fab";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -152,8 +154,10 @@ export default function RootLayout({
         <I18nProvider>
           <PwaRegistrar />
           <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
+          <main className="flex-1 flex flex-col pb-16 sm:pb-18">{children}</main>
           <Footer />
+          <TelegramFab />
+          <TelegramBottomNav />
         </I18nProvider>
       </body>
     </html>

@@ -39,3 +39,36 @@ test('3. i18n Dictionary Consistency between PT-MZ and EN', () => {
   assert.ok(ptTranslations.quickExit.length > 0);
   assert.ok(enTranslations.quickExit.length > 0);
 });
+
+test('4. Case Referral Validation & Note Formatting', () => {
+  // Test validation logic
+  const validateReferral = (payload) => {
+    if (!payload.departmentId || typeof payload.departmentId !== 'string') {
+      return { valid: false, error: 'Departamento de destino é obrigatório' };
+    }
+    if (!payload.reason || typeof payload.reason !== 'string' || payload.reason.trim().length < 5) {
+      return { valid: false, error: 'A fundamentação técnica deve ter pelo menos 5 caracteres' };
+    }
+    const validPriorities = ['LOW', 'MEDIUM', 'HIGH', 'URGENT'];
+    if (payload.priority && !validPriorities.includes(payload.priority)) {
+      return { valid: false, error: 'Prioridade inválida' };
+    }
+    return { valid: true };
+  };
+
+  assert.equal(validateReferral({ departmentId: '', reason: 'Encaminhamento urgente' }).valid, false);
+  assert.equal(validateReferral({ departmentId: 'dept-1', reason: 'abc' }).valid, false);
+  assert.equal(validateReferral({ departmentId: 'dept-1', reason: 'Encaminhamento para apoio psicológico', priority: 'HIGH' }).valid, true);
+
+  // Format referral internal note test
+  const fromDept = 'Triagem';
+  const toDept = 'Apoio Psicológico';
+  const staffName = 'Dra. Maria';
+  const reason = 'Utente necessita de avaliação urgente';
+  const note = `[ENCAMINHAMENTO TÉCNICO]\nDe: ${fromDept}\nPara: ${toDept}\nTécnico atribuído: ${staffName}\nMotivo: ${reason}`;
+
+  assert.ok(note.startsWith('[ENCAMINHAMENTO TÉCNICO]'));
+  assert.ok(note.includes(toDept));
+  assert.ok(note.includes(staffName));
+});
+

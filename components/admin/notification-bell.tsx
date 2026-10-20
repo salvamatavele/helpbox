@@ -2,11 +2,13 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useTranslation } from '@/lib/i18n/context';
 import { useBackofficeNotifications } from '@/hooks/use-backoffice-notifications';
 import { Bell, Volume2, CheckCheck, Inbox, Radio } from 'lucide-react';
 import { playNotificationSound } from '@/lib/audio';
 
 export function NotificationBell() {
+  const { t } = useTranslation();
   const {
     notifications,
     unreadCount,
@@ -64,7 +66,7 @@ export function NotificationBell() {
           <div className="p-3.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-slate-800 text-sm">
-                Notificações em Direto
+                {t.liveNotifications}
               </span>
               <span
                 className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-medium ${
@@ -72,17 +74,17 @@ export function NotificationBell() {
                     ? 'bg-emerald-100 text-emerald-800'
                     : 'bg-amber-100 text-amber-800'
                 }`}
-                title={isConnected ? 'Conexão ativa em tempo real' : 'A sincronizar via polling...'}
+                title={isConnected ? t.notificationsActive : t.notificationsSyncing}
               >
                 <Radio className={`w-2.5 h-2.5 ${isConnected ? 'animate-pulse' : ''}`} />
-                {isConnected ? 'Ativo' : 'Sincronizando'}
+                {isConnected ? t.notificationsActive : t.notificationsSyncing}
               </span>
             </div>
 
             <div className="flex items-center gap-1">
               <button
                 onClick={() => playNotificationSound()}
-                title="Testar som de notificação"
+                title="Test sound"
                 className="p-1.5 text-slate-400 hover:text-teal-600 rounded-lg transition-colors cursor-pointer"
               >
                 <Volume2 className="w-4 h-4" />
@@ -90,11 +92,11 @@ export function NotificationBell() {
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
-                  title="Marcar todas como lidas"
+                  title={t.markAsRead}
                   className="flex items-center gap-1 text-xs text-teal-700 hover:text-teal-900 font-medium px-2 py-1 rounded-md hover:bg-teal-50 transition-colors cursor-pointer"
                 >
                   <CheckCheck className="w-3.5 h-3.5" />
-                  <span>Limpar</span>
+                  <span>{t.clearAll}</span>
                 </button>
               )}
             </div>

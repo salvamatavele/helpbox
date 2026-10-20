@@ -23,7 +23,9 @@ export interface CaseDisplay {
   contactChannel?: string | null;
   title: string;
   description: string;
+  assignedToId?: string | null;
   assignedToName?: string | null;
+  departmentId?: string | null;
   departmentName?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -265,7 +267,9 @@ export async function getAllCasesForAdmin(): Promise<CaseDisplay[]> {
       contactChannel: item.contactChannel,
       title: item.title,
       description: item.description,
+      assignedToId: item.assignedToId || null,
       assignedToName: item.assignedTo?.name || null,
+      departmentId: item.departmentId || null,
       departmentName: item.department?.name || null,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
@@ -310,7 +314,9 @@ export async function getAdminCaseById(id: string): Promise<CaseDisplay | null> 
         contactChannel: item.contactChannel,
         title: item.title,
         description: item.description,
+        assignedToId: item.assignedToId || null,
         assignedToName: item.assignedTo?.name || null,
+        departmentId: item.departmentId || null,
         departmentName: item.department?.name || null,
         createdAt: item.createdAt.toISOString(),
         updatedAt: item.updatedAt.toISOString(),
@@ -453,6 +459,121 @@ export async function assignCase(
         mem.assignedToName = assignedToName;
         if (departmentName) mem.departmentName = departmentName;
         mem.status = 'IN_PROGRESS';
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+export interface ReferCaseInput {
+  caseId: string;
+  departmentId: string;
+  assignedToId?: string | null;
+  reason: string;
+  priority?: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+  actorId?: string;
+  actorName: string;
+}
+
+export async function referCase(input: ReferCaseInput): Promise<boolean> {
+  const { caseId, departmentId, assignedToId, reason, priority, actorId, actorName } = input;
+
+  try {
+    const currentCase = await prisma.case.findUnique({
+      where: { id: caseId },
+      include: { department: true, assignedTo: true },
+    });
+
+    if (!currentCase) return false;
+
+    const targetDept = await prisma.department.findUnique({
+      where: { id: departmentId },
+    });
+
+    if (!targetDept) return false;
+
+    let targetUser = null;
+    if (assignedToId) {
+      targetUser = await prisma.user.findUnique({
+        where: { id: assignedToId },
+      });
+    }
+
+    const originDeptName = currentCase.department?.name || 'Triagem Geral';
+    const targetDeptName = targetDept.name;
+    const targetUserName = targetUser?.name || null;
+
+    // 1. Update Case
+    await prisma.case.update({
+      where: { id: caseId },
+      data: {
+        departmentId: targetDept.id,
+        assignedToId: targetUser ? targetUser.id : null,
+        status: 'REFERRED',
+        ...(priority ? { priority } : {}),
+      },
+    });
+
+    // 2. Add technical internal note message
+    const transferNote = `[ENCAMINHAMENTO TÉCNICO] Processo transferido de "${originDeptName}" para "${targetDeptName}"${
+      targetUserName ? ` (Técnico atribuído: ${targetUserName})` : ''
+    }.\n\nParecer / Justificação:\n${reason.trim()}`;
+
+    await prisma.caseMessage.create({
+      data: {
+        caseId,
+        senderType: 'STAFF',
+        senderId: actorId || null,
+        senderName: actorName,
+        message: transferNote,
+        isInternalNote: true,
+      },
+    });
+
+    // 3. Add audit log
+    await prisma.caseAuditLog.create({
+      data: {
+        caseId,
+        actorId: actorId || null,
+        actorName,
+        action: 'CASE_REFERRED',
+        details: `Encaminhado de "${originDeptName}" para "${targetDeptName}"${
+          targetUserName ? ` (${targetUserName})` : ''
+        }. Justificação: ${reason.trim()}`,
+      },
+    });
+
+    // 4. Real-time broadcast
+    broadcastNotification({
+      id: `event-${Date.now()}`,
+      type: 'CASE_ASSIGNED',
+      title: 'Processo Encaminhado',
+      message: `Caso ${currentCase.trackingCode} encaminhado para ${targetDeptName}${
+        targetUserName ? ` (${targetUserName})` : ''
+      }`,
+      caseId,
+      trackingCode: currentCase.trackingCode,
+      timestamp: new Date().toISOString(),
+    });
+
+    return true;
+  } catch (err) {
+    console.error('Erro ao encaminhar caso:', err);
+    for (const mem of memoryCases.values()) {
+      if (mem.id === caseId) {
+        mem.departmentId = departmentId;
+        mem.assignedToId = assignedToId || null;
+        mem.status = 'REFERRED';
+        if (priority) mem.priority = priority;
+        mem.messages.push({
+          id: `msg-${Date.now()}`,
+          senderType: 'STAFF',
+          senderName: actorName,
+          message: `[ENCAMINHAMENTO TÉCNICO] Motivo: ${reason}`,
+          isInternalNote: true,
+          createdAt: new Date().toISOString(),
+        });
         return true;
       }
     }

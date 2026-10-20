@@ -2,9 +2,18 @@ export type Language = 'pt' | 'en';
 
 export interface Translations {
   appName: string;
+  appSubtitle: string;
   tagline: string;
   anonymousGuarantee: string;
   quickExit: string;
+  btnLogout: string;
+  searchCasesPlaceholder: string;
+  loadingDashboard: string;
+  noCasesFound: string;
+  liveNotifications: string;
+  notificationsActive: string;
+  notificationsSyncing: string;
+  clearAll: string;
   navHome: string;
   navNewCase: string;
   navTrack: string;
@@ -22,10 +31,36 @@ export interface Translations {
   empathyDesc: string;
   trackingTitle: string;
   trackingDesc: string;
+
+  // Trust Guarantees & Pillars
+  zeroIpTracking: string;
+  cryptoCodeGuarantee: string;
+  optionalIdentification: string;
+  ethicalCommitmentTitle: string;
+  ethicalCommitmentSubtitle: string;
+  safetyPillarGuarantee: string;
+  empathyPillarGuarantee: string;
+  trackingPillarGuarantee: string;
+
+  // Home Steps
+  howItWorksTitle: string;
+  howItWorksSubtitle: string;
+  step1Title: string;
+  step1Desc: string;
+  step1Badge: string;
+  step2Title: string;
+  step2Desc: string;
+  step2Badge: string;
+  step3Title: string;
+  step3Desc: string;
+  step3Badge: string;
   
   // New Case
   newCaseTitle: string;
   newCaseSubtitle: string;
+  confidentialIntakeBadge: string;
+  anonymityActiveBadge: string;
+  anonymityEncryptedDesc: string;
   categoryLabel: string;
   categorySocialSupport: string;
   categoryComplaint: string;
@@ -41,13 +76,16 @@ export interface Translations {
   titlePlaceholder: string;
   descriptionLabel: string;
   descriptionPlaceholder: string;
+  writingComfortPrompt: string;
   privacyReminder: string;
+  privacyReminderTitle: string;
   voluntaryIdentifyToggle: string;
   voluntaryIdentifyDesc: string;
   contactNameLabel: string;
   contactChannelLabel: string;
   btnSubmit: string;
   submitting: string;
+  encryptingAndSubmitting: string;
   
   // Success / Tracking Generation
   caseSubmittedTitle: string;
@@ -57,13 +95,32 @@ export interface Translations {
   copySuccess: string;
   saveCredentialsWarning: string;
   btnGoToTrack: string;
+  printSaveCredentials: string;
   
   // Track Case
   trackTitle: string;
   trackSubtitle: string;
+  trackConfidentialBadge: string;
+  trackProgressTitle: string;
+  stepSubmittedTitle: string;
+  stepSubmittedDesc: string;
+  stepTriageTitle: string;
+  stepTriageDesc: string;
+  stepProgressTitle: string;
+  stepProgressDesc: string;
+  stepResolvedTitle: string;
+  stepResolvedDesc: string;
+  recordDateLabel: string;
+  identificationLabel: string;
+  departmentLabel: string;
+  submittedReportLabel: string;
+  strictlyAnonymousLabel: string;
+  identifiedLabel: string;
+  messageSuccessAlert: string;
   trackInputPlaceholder: string;
   pinInputPlaceholder: string;
   btnSearch: string;
+  searchingCase: string;
   caseNotFound: string;
   statusLabel: string;
   statusSubmitted: string;
@@ -75,6 +132,7 @@ export interface Translations {
   statusClosed: string;
   messagesTitle: string;
   noMessagesYet: string;
+  noMessagesDesc: string;
   sendFollowupTitle: string;
   sendFollowupPlaceholder: string;
   btnSendMessage: string;
@@ -93,6 +151,22 @@ export interface Translations {
   statInTriage: string;
   statResolved: string;
   filterAll: string;
+  filterSubmitted: string;
+  filterInProgress: string;
+  filterReferred: string;
+  filterResolved: string;
+  scopeAll: string;
+  scopeMyDepartment: string;
+  scopeAssignedToMe: string;
+  colCodeDate: string;
+  colTitle: string;
+  colCategory: string;
+  colUrgency: string;
+  colStatus: string;
+  colDeptStaff: string;
+  colAction: string;
+  navTeamManagement: string;
+  navMyProfile: string;
   assignedToLabel: string;
   unassigned: string;
   btnViewDetails: string;
@@ -113,4 +187,11 @@ export interface Translations {
   newMessageAlert: string;
   markAsRead: string;
   noNotifications: string;
+  navTelegramChats: string;
+  navTelegramNew: string;
+  navTelegramTrack: string;
+  navTelegramSupport: string;
+  telegramFabTooltip: string;
+  telegramOnlineBadge: string;
+  telegramDoubleCheck: string;
 }
